@@ -18,9 +18,31 @@
     };
 }
 
+@if (TempData["ImportResult"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show py-2 mb-3" role="alert">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:0.8rem;">@TempData["ImportResult"]</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+@if (TempData["ImportError"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show py-2 mb-3" role="alert">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:0.8rem;">@TempData["ImportError"]</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h1>Job Applications</h1>
     <div class="d-flex gap-2 align-items-center">
+        <form asp-action="ImportCsv" method="post" enctype="multipart/form-data" id="importForm">
+            <input type="file" id="importFile" name="file" accept=".csv" class="d-none" />
+            <label for="importFile" class="btn-export btn-import" id="importBtn">
+                <i class="export-icon">↑</i>
+                <span class="export-label">Import CSV</span>
+            </label>
+        </form>
         <a asp-action="ExportCsv" id="exportBtn" class="btn-export">
             <i class="export-icon">↓</i>
             <span class="export-label">Export CSV</span>
@@ -84,6 +106,13 @@ else
     document.getElementById('exportBtn').addEventListener('click', function () {
         this.classList.add('exporting');
         setTimeout(() => this.classList.remove('exporting'), 600);
+    });
+
+    document.getElementById('importFile').addEventListener('change', function () {
+        if (!this.files.length) return;
+        const btn = document.getElementById('importBtn');
+        btn.classList.add('exporting');
+        document.getElementById('importForm').submit();
     });
 </script>
 }

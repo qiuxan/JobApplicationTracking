@@ -103,3 +103,28 @@ body {
   70%  { transform: translateY(2px); }
   100% { transform: translateY(8px); opacity: 0; }
 }
+
+/* Import variant — arrow goes up */
+.btn-import {
+  cursor: pointer;
+}
+
+.btn-import .export-icon {
+  display: inline-block;
+  transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-import:hover .export-icon {
+  transform: translateY(-3px);
+}
+
+.btn-import.exporting .export-icon {
+  animation: import-bounce 0.5s ease forwards;
+}
+
+@keyframes import-bounce {
+  0%   { transform: translateY(0); }
+  40%  { transform: translateY(-6px); }
+  70%  { transform: translateY(-2px); }
+  100% { transform: translateY(-8px); opacity: 0; }
+}
