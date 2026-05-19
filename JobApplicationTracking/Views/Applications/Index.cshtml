@@ -1,0 +1,74 @@
+@using JobApplicationTracking.Domain.Entities
+@using JobApplicationTracking.Application.DTOs
+@model IReadOnlyList<JobApplicationDto>
+
+@{
+    ViewData["Title"] = "Job Applications";
+    var currentFilter = ViewBag.StatusFilter as ApplicationStatus?;
+    var statuses = Enum.GetValues<ApplicationStatus>();
+
+    var badgeClass = new Dictionary<ApplicationStatus, string>
+    {
+        [ApplicationStatus.Applied] = "bg-primary",
+        [ApplicationStatus.PhoneScreen] = "bg-info text-dark",
+        [ApplicationStatus.Interview] = "bg-warning text-dark",
+        [ApplicationStatus.Offer] = "bg-success",
+        [ApplicationStatus.Rejected] = "bg-danger",
+        [ApplicationStatus.Withdrawn] = "bg-secondary"
+    };
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Job Applications</h1>
+    <a asp-action="Create" class="btn btn-primary">+ New Application</a>
+</div>
+
+<div class="mb-3 d-flex flex-wrap gap-2">
+    <a asp-action="Index" class="btn btn-sm @(currentFilter is null ? "btn-dark" : "btn-outline-dark")">All (@Model.Count)</a>
+    @foreach (var s in statuses)
+    {
+        var count = Model.Count(a => a.Status == s);
+        <a asp-action="Index" asp-route-status="@s"
+           class="btn btn-sm @(currentFilter == s ? "btn-dark" : "btn-outline-dark")">
+            @s (@count)
+        </a>
+    }
+</div>
+
+@if (!Model.Any())
+{
+    <div class="text-muted">No applications found.</div>
+}
+else
+{
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Company</th>
+                <th>Role</th>
+                <th>Applied</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var app in Model)
+            {
+                <tr>
+                    <td>@app.Company</td>
+                    <td>@app.Role</td>
+                    <td>@app.AppliedDate.ToString("MMM d, yyyy")</td>
+                    <td><span class="badge @badgeClass[app.Status]">@app.Status</span></td>
+                    <td class="text-end">
+                        <a asp-action="Details" asp-route-id="@app.Id" class="btn btn-sm btn-outline-secondary">View</a>
+                        <a asp-action="Edit" asp-route-id="@app.Id" class="btn btn-sm btn-outline-primary">Edit</a>
+                        <form asp-action="Delete" asp-route-id="@app.Id" method="post" class="d-inline"
+                              onsubmit="return confirm('Delete this application?')">
+                            <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

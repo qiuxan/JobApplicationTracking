@@ -1,0 +1,61 @@
+@using JobApplicationTracking.Domain.Entities
+@model JobApplicationTracking.Web.ViewModels.JobApplicationFormViewModel
+
+@{
+    ViewData["Title"] = "Edit Application";
+}
+
+<h1>Edit Application</h1>
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Edit" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="mb-3">
+                <label asp-for="Company" class="form-label"></label>
+                <input asp-for="Company" class="form-control" />
+                <span asp-validation-for="Company" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Role" class="form-label"></label>
+                <input asp-for="Role" class="form-control" />
+                <span asp-validation-for="Role" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="AppliedDate" class="form-label"></label>
+                <input asp-for="AppliedDate" type="date" class="form-control" />
+                <span asp-validation-for="AppliedDate" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Status" class="form-label"></label>
+                <select asp-for="Status" asp-items="Html.GetEnumSelectList<ApplicationStatus>()" class="form-select"></select>
+            </div>
+            <div class="mb-3">
+                <label asp-for="JobUrl" class="form-label"></label>
+                <input asp-for="JobUrl" class="form-control" placeholder="https://..." />
+            </div>
+            <div class="mb-3">
+                <label asp-for="ContactName" class="form-label"></label>
+                <input asp-for="ContactName" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label asp-for="ContactEmail" class="form-label"></label>
+                <input asp-for="ContactEmail" class="form-control" />
+                <span asp-validation-for="ContactEmail" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Notes" class="form-label"></label>
+                <textarea asp-for="Notes" class="form-control" rows="4"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a asp-action="Index" class="btn btn-outline-secondary ms-2">Cancel</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
