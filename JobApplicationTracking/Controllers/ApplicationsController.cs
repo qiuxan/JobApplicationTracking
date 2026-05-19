@@ -2,6 +2,7 @@ using System.Text;
 using JobApplicationTracking.Application.DTOs;
 using JobApplicationTracking.Application.Services;
 using JobApplicationTracking.Domain.Entities;
+using JobApplicationTracking.Domain.Exceptions;
 using JobApplicationTracking.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,8 +26,16 @@ public class ApplicationsController(JobApplicationService service) : Controller
     public async Task<IActionResult> Create(JobApplicationFormViewModel vm)
     {
         if (!ModelState.IsValid) return View(vm);
-        await service.CreateAsync(vm.Company, vm.Role, vm.AppliedDate, vm.JobUrl, vm.ContactName, vm.ContactEmail, vm.Description, vm.Notes);
-        return RedirectToAction(nameof(Index));
+        try
+        {
+            await service.CreateAsync(vm.Company, vm.Role, vm.AppliedDate, vm.JobUrl, vm.ContactName, vm.ContactEmail, vm.Description, vm.Notes);
+            return RedirectToAction(nameof(Index));
+        }
+        catch (DuplicateApplicationException ex)
+        {
+            ModelState.AddModelError(string.Empty, ex.Message);
+            return View(vm);
+        }
     }
 
     [HttpGet]
@@ -74,6 +83,25 @@ public class ApplicationsController(JobApplicationService service) : Controller
     public async Task<IActionResult> Delete(int id)
     {
         await service.DeleteAsync(id);
+        return RedirectToAction(nameof(Index));
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ImportCsv(IFormFile? file)
+    {
+        if (file is null || file.Length == 0 || !file.FileName.EndsWith(".csv", StringComparison.OrdinalIgnoreCase))
+        {
+            TempData["ImportError"] = "Please select a valid .csv file.";
+            return RedirectToAction(nameof(Index));
+        }
+
+        using var stream = file.OpenReadStream();
+        var (imported, skipped, duplicates) = await service.ImportCsvAsync(stream);
+        var parts = new List<string> { $"{imported} record(s) imported" };
+        if (duplicates > 0) parts.Add($"{duplicates} duplicate(s) skipped");
+        if (skipped > 0) parts.Add($"{skipped} skipped (missing required fields)");
+        TempData["ImportResult"] = string.Join(", ", parts) + ".";
         return RedirectToAction(nameof(Index));
     }
 

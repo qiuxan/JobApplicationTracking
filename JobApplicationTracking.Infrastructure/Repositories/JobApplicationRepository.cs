@@ -18,6 +18,12 @@ public class JobApplicationRepository(AppDbContext context) : IJobApplicationRep
     public Task<JobApplication?> GetByIdAsync(int id) =>
         context.JobApplications.FirstOrDefaultAsync(a => a.Id == id);
 
+    public Task<bool> ExistsAsync(string company, string role, DateOnly appliedDate) =>
+        context.JobApplications.AnyAsync(a =>
+            a.Company.ToLower() == company.ToLower() &&
+            a.Role.ToLower() == role.ToLower() &&
+            a.AppliedDate == appliedDate);
+
     public async Task AddAsync(JobApplication application)
     {
         context.JobApplications.Add(application);
