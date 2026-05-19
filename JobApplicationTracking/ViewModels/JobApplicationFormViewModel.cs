@@ -28,6 +28,9 @@ public class JobApplicationFormViewModel
     [Display(Name = "Date Applied")]
     public DateOnly AppliedDate { get; set; } = DateOnly.FromDateTime(DateTime.Today);
 
+    [Display(Name = "Job Description")]
+    public string? Description { get; set; }
+
     [MaxLength(2000)]
     public string? Notes { get; set; }
 

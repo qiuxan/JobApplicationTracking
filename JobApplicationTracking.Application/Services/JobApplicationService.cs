@@ -18,19 +18,19 @@ public class JobApplicationService(IJobApplicationRepository repository)
         return application is null ? null : ToDto(application);
     }
 
-    public async Task<JobApplicationDto> CreateAsync(string company, string role, DateOnly appliedDate, string? jobUrl, string? contactName, string? contactEmail, string? notes)
+    public async Task<JobApplicationDto> CreateAsync(string company, string role, DateOnly appliedDate, string? jobUrl, string? contactName, string? contactEmail, string? description, string? notes)
     {
-        var application = JobApplication.Create(company, role, appliedDate, jobUrl, contactName, contactEmail, notes);
+        var application = JobApplication.Create(company, role, appliedDate, jobUrl, contactName, contactEmail, description, notes);
         await repository.AddAsync(application);
         return ToDto(application);
     }
 
-    public async Task<bool> UpdateAsync(int id, string company, string role, DateOnly appliedDate, string? jobUrl, string? contactName, string? contactEmail, string? notes)
+    public async Task<bool> UpdateAsync(int id, string company, string role, DateOnly appliedDate, string? jobUrl, string? contactName, string? contactEmail, string? description, string? notes)
     {
         var application = await repository.GetByIdAsync(id);
         if (application is null) return false;
 
-        application.UpdateDetails(company, role, appliedDate, jobUrl, contactName, contactEmail, notes);
+        application.UpdateDetails(company, role, appliedDate, jobUrl, contactName, contactEmail, description, notes);
         await repository.UpdateAsync(application);
         return true;
     }
@@ -56,6 +56,6 @@ public class JobApplicationService(IJobApplicationRepository repository)
 
     private static JobApplicationDto ToDto(JobApplication a) => new(
         a.Id, a.Company, a.Role, a.JobUrl, a.ContactName, a.ContactEmail,
-        a.Status, a.AppliedDate, a.Notes, a.CreatedAt, a.UpdatedAt
+        a.Status, a.AppliedDate, a.Description, a.Notes, a.CreatedAt, a.UpdatedAt
     );
 }

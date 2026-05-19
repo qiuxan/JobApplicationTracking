@@ -48,6 +48,14 @@
         </dd>
     }
 
+    @if (!string.IsNullOrEmpty(Model.Description))
+    {
+        <dt class="col-sm-3">Job Description</dt>
+        <dd class="col-sm-9">
+            <pre class="border rounded p-3 bg-light" style="white-space: pre-wrap; font-size: 0.875rem;">@Model.Description</pre>
+        </dd>
+    }
+
     @if (!string.IsNullOrEmpty(Model.Notes))
     {
         <dt class="col-sm-3">Notes</dt>

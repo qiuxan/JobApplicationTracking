@@ -23,7 +23,7 @@ public class ApplicationsController(JobApplicationService service) : Controller
     public async Task<IActionResult> Create(JobApplicationFormViewModel vm)
     {
         if (!ModelState.IsValid) return View(vm);
-        await service.CreateAsync(vm.Company, vm.Role, vm.AppliedDate, vm.JobUrl, vm.ContactName, vm.ContactEmail, vm.Notes);
+        await service.CreateAsync(vm.Company, vm.Role, vm.AppliedDate, vm.JobUrl, vm.ContactName, vm.ContactEmail, vm.Description, vm.Notes);
         return RedirectToAction(nameof(Index));
     }
 
@@ -40,6 +40,7 @@ public class ApplicationsController(JobApplicationService service) : Controller
             JobUrl = dto.JobUrl,
             ContactName = dto.ContactName,
             ContactEmail = dto.ContactEmail,
+            Description = dto.Description,
             Notes = dto.Notes,
             Status = dto.Status
         };
@@ -51,7 +52,7 @@ public class ApplicationsController(JobApplicationService service) : Controller
     public async Task<IActionResult> Edit(int id, JobApplicationFormViewModel vm)
     {
         if (!ModelState.IsValid) return View(vm);
-        var updated = await service.UpdateAsync(id, vm.Company, vm.Role, vm.AppliedDate, vm.JobUrl, vm.ContactName, vm.ContactEmail, vm.Notes);
+        var updated = await service.UpdateAsync(id, vm.Company, vm.Role, vm.AppliedDate, vm.JobUrl, vm.ContactName, vm.ContactEmail, vm.Description, vm.Notes);
         if (!updated) return NotFound();
         if (vm.Status.HasValue)
             await service.UpdateStatusAsync(id, vm.Status.Value);

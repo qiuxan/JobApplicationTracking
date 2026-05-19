@@ -46,6 +46,11 @@
                 <span asp-validation-for="ContactEmail" class="text-danger"></span>
             </div>
             <div class="mb-3">
+                <label asp-for="Description" class="form-label"></label>
+                <textarea asp-for="Description" class="form-control font-monospace" rows="12"
+                          placeholder="Paste the job posting here..."></textarea>
+            </div>
+            <div class="mb-3">
                 <label asp-for="Notes" class="form-label"></label>
                 <textarea asp-for="Notes" class="form-control" rows="4"></textarea>
             </div>

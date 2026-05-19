@@ -69,6 +69,11 @@ TestResult.xml
 # BenchmarkDotNet
 BenchmarkDotNet.Artifacts/
 
+## SQLite
+*.db
+*.db-shm
+*.db-wal
+
 ## ASP.NET
 
 # Bundled assets

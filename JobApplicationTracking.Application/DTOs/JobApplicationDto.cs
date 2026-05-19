@@ -11,6 +11,7 @@ public record JobApplicationDto(
     string? ContactEmail,
     ApplicationStatus Status,
     DateOnly AppliedDate,
+    string? Description,
     string? Notes,
     DateTime CreatedAt,
     DateTime UpdatedAt

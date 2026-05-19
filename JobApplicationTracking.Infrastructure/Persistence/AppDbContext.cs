@@ -17,6 +17,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             entity.Property(e => e.JobUrl).HasMaxLength(500);
             entity.Property(e => e.ContactName).HasMaxLength(200);
             entity.Property(e => e.ContactEmail).HasMaxLength(200);
+            entity.Property(e => e.Description);
             entity.Property(e => e.Notes).HasMaxLength(2000);
             entity.Property(e => e.Status).HasConversion<string>();
         });
