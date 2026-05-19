@@ -29,3 +29,77 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+/* ── Export CSV button ── */
+.btn-export {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 1.1rem;
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #1a1a1a;
+  background: transparent;
+  border: 1.5px dashed #1a1a1a;
+  border-radius: 2px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  text-decoration: none;
+  transition: color 0.22s ease, border-style 0.22s ease;
+}
+
+.btn-export::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: #1a1a1a;
+  transform: translateX(-101%);
+  transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 0;
+}
+
+.btn-export:hover {
+  color: #fff;
+  border-style: solid;
+  text-decoration: none;
+}
+
+.btn-export:hover::before {
+  transform: translateX(0);
+}
+
+.btn-export:active {
+  transform: scale(0.97);
+}
+
+.btn-export .export-label,
+.btn-export .export-icon {
+  position: relative;
+  z-index: 1;
+}
+
+.btn-export .export-icon {
+  display: inline-block;
+  transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  font-style: normal;
+  line-height: 1;
+}
+
+.btn-export:hover .export-icon {
+  transform: translateY(3px);
+}
+
+.btn-export.exporting .export-icon {
+  animation: export-bounce 0.5s ease forwards;
+}
+
+@keyframes export-bounce {
+  0%   { transform: translateY(0); }
+  40%  { transform: translateY(6px); }
+  70%  { transform: translateY(2px); }
+  100% { transform: translateY(8px); opacity: 0; }
+}
